@@ -16,7 +16,6 @@ int main()
     std::string command;
     std::getline(std::cin, command);
 
-    // exit
     if (command == "exit")
     {
       break;
@@ -25,6 +24,17 @@ int main()
     {
       // Print the command after echo
       std::cout << command.substr(5) << std::endl;
+    }
+    else if (command.substr(0, 4) == "type")
+    {
+      if (command.substr(5) == "echo" || command.substr(5) == "type" || command.substr(5) == "exit")
+      {
+        std::cout << command.substr(5) << " is a shell builtin" << std::endl;
+      }
+      else
+      {
+        std::cout << command.substr(5) << " not found" << std::endl;
+      }
     }
     else
     {
