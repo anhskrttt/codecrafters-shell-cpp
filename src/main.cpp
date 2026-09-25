@@ -21,8 +21,15 @@ int main()
     {
       break;
     }
-
-    // Print the command not found
-    std::cout << command << ": command not found" << std::endl;
+    else if (command.substr(0, 4) == "echo")
+    {
+      // Print the command after echo
+      std::cout << command.substr(5) << std::endl;
+    }
+    else
+    {
+      // Print the command not found
+      std::cout << command << ": command not found" << std::endl;
+    }
   }
 }
