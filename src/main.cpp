@@ -25,9 +25,6 @@ int main()
     input >> program;
     std::getline(input >> std::ws, argument);
 
-    std::cout << "Program:\t" << program << std::endl;
-    std::cout << "Argument:\t" << argument << std::endl;
-
     if(program == "exit") {
       break;
     }
