@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <unistd.h>
 
 int main()
 {
@@ -25,47 +26,55 @@ int main()
     input >> program;
     std::getline(input >> std::ws, argument);
 
-    if(program == "exit") {
+    std::string path = std::getenv("PATH");
+
+    // Split the PATH variable into individual directories
+    std::istringstream pathStream(path);
+    std::string directory;
+    // while (std::getline(pathStream, directory, ':')) {
+    //   std::cout << directory << std::endl;
+    // }
+
+    if (program == "exit")
+    {
       break;
     }
 
-    if(program == "echo") {
+    if (program == "echo")
+    {
       std::cout << argument << std::endl;
-    } else if(program == "type") {
-      if(argument == "echo" || argument == "type" || argument == "exit") {
+    }
+    else if (program == "type")
+    {
+      if (argument == "echo" || argument == "type" || argument == "exit")
+      {
         std::cout << argument << " is a shell builtin" << std::endl;
-      } else {
-        std::cout << argument << " not found" << std::endl;
       }
-    } else {
+      else
+      {
+        // std::cout << argument << " not found" << std::endl;
+        // Check if the command exists in the PATH directories
+        bool commandFound = false;
+        while (std::getline(pathStream, directory, ':'))
+        {
+          std::string commandPath = directory + "/" + argument;
+          if (access(commandPath.c_str(), X_OK) == 0)
+          {
+            std::cout << argument << " is " << commandPath << std::endl;
+            commandFound = true;
+            break;
+          }
+        }
+
+        if (!commandFound)
+        {
+          std::cout << argument << ": not found" << std::endl;
+        }
+      }
+    }
+    else
+    {
       std::cout << program << ": command not found" << std::endl;
     }
-
-    //   if (command == "exit")
-    //   {
-    //     break;
-    //   }
-
-    //   else if (command.substr(0, 4) == "echo")
-    //   {
-    //     // Print the command after echo
-    //     std::cout << command.substr(5) << std::endl;
-    //   }
-    //   else if (command.substr(0, 4) == "type")
-    //   {
-    //     if (command.substr(5) == "echo" || command.substr(5) == "type" || command.substr(5) == "exit")
-    //     {
-    //       std::cout << command.substr(5) << " is a shell builtin" << std::endl;
-    //     }
-    //     else
-    //     {
-    //       std::cout << command.substr(5) << " not found" << std::endl;
-    //     }
-    //   }
-    //   else
-    //   {
-    //     // Print the command not found
-    //     std::cout << command << ": command not found" << std::endl;
-    //   }
   }
 }
